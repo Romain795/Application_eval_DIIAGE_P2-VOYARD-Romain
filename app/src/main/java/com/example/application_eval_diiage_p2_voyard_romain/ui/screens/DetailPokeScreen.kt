@@ -40,9 +40,8 @@ fun DetailPokeScreen(
     // ViewModel pour gérer les données
     val viewModel: DetailPokeViewmodels = viewModel()
 
-    // Charger les données du Pokémon au lancement de l'écran
-    LaunchedEffect(pokemonId) {
-        viewModel.fetchPokemonDetail(pokemonId)
+    LaunchedEffect(true) {
+        viewModel.fetchPokemonDetail()
     }
 
     val pokemon by viewModel.pokemonDetail.collectAsState()
