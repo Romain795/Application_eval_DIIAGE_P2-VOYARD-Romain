@@ -2,8 +2,8 @@ package com.example.application_eval_diiage_p2_voyard_romain.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.application_eval_diiage_p2_voyard_romain.data.Pokemon
-import com.example.application_eval_diiage_p2_voyard_romain.data.RetrofitInstance
+import com.example.application_eval_diiage_p2_voyard_romain.domain.mocke.getMockedPokemon
+import com.example.application_eval_diiage_p2_voyard_romain.domain.models.Pokemon
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,8 +19,9 @@ class ListPokeViewmodels : ViewModel() {
     private fun fetchPokemonList() {
         viewModelScope.launch {
             try {
-                val response = RetrofitInstance.api.getPokemonList()
-                _pokemonList.value = response.results // Mettez à jour l'état
+                // Remplacez l'appel au repository par l'appel du mock
+                val response = getMockedPokemon()
+                _pokemonList.value = response // Mettez à jour l'état avec les données mockées
             } catch (e: Exception) {
                 e.printStackTrace()
             }

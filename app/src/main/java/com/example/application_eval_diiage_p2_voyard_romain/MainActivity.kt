@@ -35,17 +35,17 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Routes.varDetailPokeRoute) {
                             navBackstackEntry ->
-                        val pokemonName = navBackstackEntry.arguments?.getString("pokemonName")
+                        val pokemonid = navBackstackEntry.arguments?.getInt("pokemon_id")
 
-                        if (pokemonName == null) {
+                        if (pokemonid == null) {
                             navController.popBackStack()
-                            Log.d("Details_pokemon", "devrais recevoir un nom de pokémon")
+                            Log.d("Details_pokemon", "on devrais recevoir un id de pokémon")
                             return@composable
                         }
 
                         DetailPokeScreen(
                             navController = navController,
-                            PokeName = pokemonName
+                            pokemonId = pokemonid
                         )
                     }
                 })

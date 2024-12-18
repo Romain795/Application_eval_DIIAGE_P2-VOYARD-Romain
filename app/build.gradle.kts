@@ -58,6 +58,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.retrofit) //pour l'api
+    implementation(libs.coil.compose)
     implementation(libs.converter.gson) // Pour convertir JSON en objets Kotlin
     implementation(libs.kotlinx.coroutines.android) // Pour utiliser des coroutines
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel pour Compose

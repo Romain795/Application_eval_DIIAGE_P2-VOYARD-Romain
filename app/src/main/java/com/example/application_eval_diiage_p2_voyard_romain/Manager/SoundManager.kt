@@ -35,5 +35,5 @@ class SoundManager(private val context: Context) {
         }
     }
 
-    //fun playButtonClickedSound() = playSound(R.raw.button_clicked_sound)
+    fun playButtonClickedSound() = playSound(R.raw.beep)
 }

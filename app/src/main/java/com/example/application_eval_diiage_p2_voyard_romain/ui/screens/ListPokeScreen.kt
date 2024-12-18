@@ -3,6 +3,7 @@ package com.example.application_eval_diiage_p2_voyard_romain.ui.screens
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.os.Vibrator
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,8 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.example.application_eval_diiage_p2_voyard_romain.R
 import com.example.application_eval_diiage_p2_voyard_romain.Routes
+import com.example.application_eval_diiage_p2_voyard_romain.domain.models.Pokemon
 import com.example.application_eval_diiage_p2_voyard_romain.nativemanager.SoundManager
 import com.example.application_eval_diiage_p2_voyard_romain.nativemanager.VibrationManager
 
@@ -52,14 +56,15 @@ fun ListPokeScreen(navController: NavController) {
     ) {
         Text(text = "Liste de Pokémons", modifier = Modifier.padding(16.dp))
 
-        // Si la liste de pokemon est remplie cela affiche la liste sinon cela affiche un chargement
+        // Si la liste de pokemon est vide, afficher un message de chargement
         if (pokemonList.isEmpty()) {
             Text(text = "Chargement des Pokémons...")
         } else {
+            // Utiliser la fonction ContentGrid pour afficher la liste des Pokémon
             ContentGrid(
-                pokemons = listOf("Pikachu", "Léviator", "Yveltal", "Solgaleo", "yo", "yo", "yo", "yo", "yo", "yo", "yo", "yo", "yo") /*pokemonList.map { it.name }*/,
-                onpokemonClick = { pokemonName ->
-                    navController.navigate("DetailPokemonRoute/hello") // Permet d'ouvrir l'écran détail avec le pokemon sélectionner
+                pokemons = pokemonList,
+                onpokemonClick = { pokemonId ->
+                    navController.navigate("DetailPokemonRoute/$pokemonId") // Permet d'ouvrir l'écran détail avec le pokemon sélectionné
                 }
             )
         }
@@ -68,8 +73,8 @@ fun ListPokeScreen(navController: NavController) {
 
 @Composable
 fun ContentGrid(
-    pokemons: List<String>, // Liste des pokemons
-    onpokemonClick: (String) -> Unit // Fonction qui sera appeler lorsqu'on clique sur un pokemon
+    pokemons: List<Pokemon>, // Liste des objets Pokemon
+    onpokemonClick: (Int) -> Unit // Fonction appelée lorsqu'on clique sur un pokemon
 ) {
     val context = LocalContext.current
 
@@ -78,7 +83,7 @@ fun ContentGrid(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(pokemons) { challenge ->
+        items(pokemons) { pokemon ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,16 +94,33 @@ fun ContentGrid(
                     )
                     .padding(8.dp)
                     .clickable {
-                        //SoundManager(context).playButtonClickedSound()
+                        // Jouer le son et vibration lors du clic sur un Pokémon
+                        SoundManager(context).playButtonClickedSound()
                         VibrationManager(context).vibrateOnButtonClicked()
-                        onpokemonClick(challenge)
+                        onpokemonClick(pokemon.id)
                     }
             ) {
-                Text(
-                    text = challenge,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier.fillMaxSize()
-                )
+                // Afficher le nom du Pokémon et son image
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Afficher l'image du Pokémon
+                    Image(
+                        painter = rememberAsyncImagePainter(pokemon.image),
+                        contentDescription = pokemon.name,
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                    )
+
+                    // Afficher le nom du Pokémon
+                    Text(
+                        text = pokemon.name,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -108,7 +130,26 @@ fun ContentGrid(
 @Composable
 fun PreviewGrid() {
     ContentGrid(
-        pokemons = listOf("Pikachu", "Léviator", "Yveltal", "Solgaleo", "yo", "yo", "yo", "yo", "yo", "yo", "yo", "yo", "yo"),
+        pokemons = listOf(
+            Pokemon(
+                name = "Pikachu",
+                image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+                id = TODO(),
+                types = TODO(),
+                abilities = TODO(),
+                url = TODO(),
+                created = TODO()
+            ),
+            Pokemon(
+                name = "Bulbizarre",
+                image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+                id = TODO(),
+                types = TODO(),
+                abilities = TODO(),
+                url = TODO(),
+                created = TODO()
+            )
+        ),
         onpokemonClick = { pokemonName -> println("Clicked on: $pokemonName") }
     )
 }
